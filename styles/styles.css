@@ -13,32 +13,32 @@
 /* stylelint-disable no-empty-source */
 :root, .dropin-design {
   /* Adobe Commerce Dropin design tokens */
-  --color-brand-300: #b8d8f0;
-  --color-brand-500: #8fc5eb;
-  --color-brand-600: #76b4e0;
-  --color-brand-700: #5fa1d4;
+  --color-brand-300: #c7ead1;
+  --color-brand-500: #9fd8ad;
+  --color-brand-600: #86c996;
+  --color-brand-700: #6fb782;
   --color-neutral-50: #ffffff;
-  --color-neutral-100: #f7fbff;
-  --color-neutral-200: #eef6fc;
-  --color-neutral-300: #d9e9f6;
-  --color-neutral-400: #c2d9ea;
-  --color-neutral-500: #9db9cc;
-  --color-neutral-600: #7291a8;
-  --color-neutral-700: #567089;
-  --color-neutral-800: #35506a;
-  --color-neutral-900: #24384c;
-  --color-positive-200: #eff9f6;
-  --color-positive-500: #7fbda9;
-  --color-positive-800: #4f8f7d;
-  --color-informational-200: #e8f4ff;
-  --color-informational-500: #6faee8;
-  --color-informational-800: #4c8ccf;
-  --color-warning-200: #fdf5ea;
-  --color-warning-500: #e6a96c;
-  --color-warning-800: #c87a35;
-  --color-alert-200: #fff0f2;
-  --color-alert-500: #dc7d94;
-  --color-alert-800: #c45974;
+  --color-neutral-100: #f7fbf7;
+  --color-neutral-200: #edf7ef;
+  --color-neutral-300: #d7eadb;
+  --color-neutral-400: #bed8c4;
+  --color-neutral-500: #9bb8a2;
+  --color-neutral-600: #75907c;
+  --color-neutral-700: #5a735f;
+  --color-neutral-800: #3d5842;
+  --color-neutral-900: #27412b;
+  --color-positive-200: #edf8f0;
+  --color-positive-500: #8ecf9e;
+  --color-positive-800: #5ea06b;
+  --color-informational-200: #eaf8ef;
+  --color-informational-500: #8ac7a0;
+  --color-informational-800: #5f9f76;
+  --color-warning-200: #fbf5ea;
+  --color-warning-500: #dcbf7a;
+  --color-warning-800: #b98f46;
+  --color-alert-200: #fef0f0;
+  --color-alert-500: #d99191;
+  --color-alert-800: #b96a6a;
   --color-button-active: var(--color-brand-700);
   --color-button-focus: var(--color-neutral-400);
   --color-button-hover: var(--color-brand-600);
@@ -151,7 +151,7 @@ body {
   margin: 0;
   color: var(--color-neutral-800);
   background:
-    linear-gradient(180deg, #f9fcff 0%, #eef7fd 100%);
+    linear-gradient(180deg, #fbfffc 0%, #eef8ef 100%);
   background-color: var(--background-color);
   display: grid;
   grid-template-rows: auto 1fr auto;
