@@ -47,8 +47,12 @@
 .order-confirmation-footer__contact-support a {
   font: var(--type-body-2-strong-font);
   letter-spacing: var(--type-body-2-strong-letter-spacing);
-  color: var(--color-brand-500);
+  color: var(--color-brand-600);
   cursor: pointer;
+}
+
+.order-confirmation-footer__contact-support a:hover {
+  color: var(--color-brand-700);
 }
 
 /* Hide empty blocks */
