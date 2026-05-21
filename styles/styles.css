@@ -13,32 +13,32 @@
 /* stylelint-disable no-empty-source */
 :root, .dropin-design {
   /* Adobe Commerce Dropin design tokens */
-  --color-brand-300: #6d6d6d;
-  --color-brand-500: #454545;
-  --color-brand-600: #383838;
-  --color-brand-700: #2b2b2b;
-  --color-neutral-50: #fff;
-  --color-neutral-100: #fafafa;
-  --color-neutral-200: #f5f5f5;
-  --color-neutral-300: #e8e8e8;
-  --color-neutral-400: #d6d6d6;
-  --color-neutral-500: #b8b8b8;
-  --color-neutral-600: #8f8f8f;
-  --color-neutral-700: #666;
-  --color-neutral-800: #3d3d3d;
-  --color-neutral-900: #292929;
-  --color-positive-200: #eff5ef;
-  --color-positive-500: #7fb078;
-  --color-positive-800: #53824c;
-  --color-informational-200: #eeeffb;
-  --color-informational-500: #6978d9;
-  --color-informational-800: #5d6dd6;
-  --color-warning-200: #fdf3e9;
-  --color-warning-500: #e79f5c;
-  --color-warning-800: #cc7a2e;
-  --color-alert-200: #ffebeb;
-  --color-alert-500: #db7070;
-  --color-alert-800: #c35050;
+  --color-brand-300: #f3c3d2;
+  --color-brand-500: #ec9fba;
+  --color-brand-600: #df86a6;
+  --color-brand-700: #cc6f91;
+  --color-neutral-50: #ffffff;
+  --color-neutral-100: #fff7fa;
+  --color-neutral-200: #fdeef3;
+  --color-neutral-300: #f7d8e2;
+  --color-neutral-400: #efc1d1;
+  --color-neutral-500: #d9a3b7;
+  --color-neutral-600: #b87f99;
+  --color-neutral-700: #965c77;
+  --color-neutral-800: #73445d;
+  --color-neutral-900: #553449;
+  --color-positive-200: #f7eef4;
+  --color-positive-500: #d2a3be;
+  --color-positive-800: #a8708d;
+  --color-informational-200: #f6edf8;
+  --color-informational-500: #c78fda;
+  --color-informational-800: #a365ba;
+  --color-warning-200: #fff3ec;
+  --color-warning-500: #ebb08b;
+  --color-warning-800: #c98057;
+  --color-alert-200: #fff0f4;
+  --color-alert-500: #e08aa7;
+  --color-alert-800: #bf6482;
   --color-button-active: var(--color-brand-700);
   --color-button-focus: var(--color-neutral-400);
   --color-button-hover: var(--color-brand-600);
@@ -68,9 +68,9 @@
   --shape-border-width-2: 1.5px;
   --shape-border-width-3: 2px;
   --shape-border-width-4: 4px;
-  --shape-shadow-1: 0 0 16px 0 rgb(0 0 0 / 16%);
-  --shape-shadow-2: 0 2px 16px 0 rgb(0 0 0 / 16%);
-  --shape-shadow-3: 0 2px 3px 0 rgb(0 0 0 / 16%);
+  --shape-shadow-1: 0 0 16px 0 rgb(0 0 0 / 10%);
+  --shape-shadow-2: 0 2px 16px 0 rgb(0 0 0 / 10%);
+  --shape-shadow-3: 0 2px 3px 0 rgb(0 0 0 / 10%);
   --shape-icon-stroke-1: 1px;
   --shape-icon-stroke-2: 1.5px;
   --shape-icon-stroke-3: 2px;
@@ -150,6 +150,8 @@ body {
   letter-spacing: var(--type-body-1-default-letter-spacing);
   margin: 0;
   color: var(--color-neutral-800);
+  background:
+    linear-gradient(180deg, #fffafd 0%, #fff0f6 100%);
   background-color: var(--background-color);
   display: grid;
   grid-template-rows: auto 1fr auto;
@@ -194,6 +196,7 @@ h6 {
   margin-bottom: 0.25em;
   line-height: 1.25;
   scroll-margin: 40px;
+  color: var(--color-neutral-900);
 }
 
 h1 {
@@ -255,11 +258,12 @@ pre {
 }
 
 main pre {
-  background-color: var(--color-neutral-300);
+  background-color: var(--color-neutral-200);
   padding: 1em;
   border-radius: 0.25em;
   overflow-x: auto;
   white-space: pre;
+  border: 1px solid var(--color-neutral-300);
 }
 
 main > div {
@@ -283,31 +287,23 @@ a:not(.dropin-design a) {
 }
 
 a:not(.dropin-design a):hover {
-  color: var(--color-brand-600);
+  color: var(--color-brand-700);
   text-decoration: underline;
 }
 
 /* buttons */
-p.button-wrapper {
-  margin: var(--spacing-small) 0;
-}
-
 main a.button:any-link,
 button.button {
   box-sizing: border-box;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: inline-block;
   max-width: 100%;
-  margin: 0;
+  margin: var(--spacing-small) 0;
   border: var(--shape-border-width-3) solid transparent;
   border-radius: var(--shape-border-radius-3);
   padding: 0.5em 1.2em;
   font: var(--type-button-2-font);
   letter-spacing: var(--type-button-2-letter-spacing);
-  font-style: normal;
-  font-weight: 500;
-  line-height: 1.25;
+  text-align: center;
   text-decoration: none;
   background-color: var(--color-brand-500);
   color: var(--color-neutral-50);
@@ -317,333 +313,111 @@ button.button {
   white-space: nowrap;
 }
 
-a.button[aria-disabled="true"],
-button.button:disabled {
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-main a.button:hover,
-main a.button:focus,
+main a.button:any-link:hover,
+main a.button:any-link:focus,
 button.button:hover,
 button.button:focus {
   background-color: var(--color-brand-600);
   cursor: pointer;
 }
 
-main a.button.disabled,
 button.button:disabled,
 button.button:disabled:hover {
   background-color: var(--color-neutral-300);
-  cursor: unset;
+  cursor: default;
 }
 
-a.button.primary,
-button.button.primary {
-  border-color: var(--color-brand-500);
-  background-color: var(--color-brand-500);
-  color: var(--color-neutral-50);
-}
-
-a.button.primary:hover,
-a.button.primary:focus-visible,
-button.button.primary:hover,
-button.button.primary:focus-visible {
-  border-color: var(--color-brand-600);
-  background-color: var(--color-brand-600);
-}
-
-a.button.primary[aria-disabled="true"],
-a.button.primary[aria-disabled="true"]:hover,
-a.button.primary[aria-disabled="true"]:focus-visible,
-button.button.primary:disabled,
-button.button.primary:disabled:hover,
-button.button.primary:disabled:focus-visible {
-  background-color: var(--color-neutral-300);
-  border-color: var(--color-neutral-300);
-  color: var(--color-neutral-50);
-}
-
-main a.button.secondary,
-button.button.secondary {
-  background-color: unset;
+button.button.secondary,
+main a.button.secondary:any-link {
+  background-color: initial;
   border: var(--shape-border-width-3) solid currentcolor;
   color: var(--color-brand-500);
 }
 
-main a.button.secondary:hover,
-main a.button.secondary:focus-visible,
 button.button.secondary:hover,
-button.button.secondary:focus-visible {
-  color: var(--color-brand-600);
+button.button.secondary:focus,
+main a.button.secondary:any-link:hover,
+main a.button.secondary:any-link:focus {
+  color: var(--color-brand-700);
 }
 
-
-main input:hover {
+button.button.cta,
+main a.button.cta:any-link {
+  background-color: initial;
   border: var(--shape-border-width-1) solid var(--color-neutral-700);
-}
-
-main blockquote {
-  font-style: italic;
-  margin: 3rem;
-  text-indent: -1rem;
-  hanging-punctuation: first;
-}
-
-main blockquote p::before {
-  content: '\201C';
-  line-height: 0;
-}
-
-main blockquote p::after {
-  content: '\201D';
-  line-height: 0;
-}
-
-a.button.secondary[aria-disabled="true"],
-a.button.secondary[aria-disabled="true"]:hover,
-a.button.secondary[aria-disabled="true"]:focus-visible,
-button.button.secondary:disabled,
-button.button.secondary:disabled:hover,
-button.button.secondary:disabled:focus-visible {
-  background-color: var(--light-color);
-  border-color: var(--light-color);
-  color: var(--dark-color);
-}
-
-/* high-impact call-to-action */
-a.button.accent,
-button.button.accent {
-  border-color: var(--link-color);
-  background-color: var(--link-color);
-  color: var(--background-color);
-}
-
-a.button.accent:hover,
-a.button.accent:focus-visible,
-button.button.accent:hover,
-button.button.accent:focus-visible {
-  border-color: var(--link-hover-color);
-  background-color: var(--link-hover-color);
-}
-
-a.button.accent[aria-disabled="true"],
-a.button.accent[aria-disabled="true"]:hover,
-a.button.accent[aria-disabled="true"]:focus-visible,
-button.button.accent:disabled,
-button.button.accent:disabled:hover,
-button.button.accent:disabled:focus-visible {
-  background-color: var(--light-color);
-  border-color: var(--light-color);
-  color: var(--dark-color);
-}
-
-main img {
-  max-width: 100%;
-  width: auto;
-  height: auto;
-}
-
-.icon {
-  display: inline-block;
-  height: 2.4rem;
-  width: 2.4rem;
-}
-
-.icon img {
-  height: 100%;
-  width: 100%;
+  color: currentcolor;
 }
 
 /* sections */
-main > .section {
-  margin: var(--spacing-xbig) 0;
-}
-
-.section:empty {
-  display: none;
-}
-
 main > .section > div {
   max-width: 1200px;
   margin: auto;
   padding: 0 var(--spacing-medium);
 }
 
-main > .section:first-of-type {
-  margin-top: 0;
-}
-
-@media (min-width: 900px) {
+@media (width >= 600px) {
   main > .section > div {
     padding: 0 var(--spacing-big);
   }
 }
 
-/* section metadata - styles - start */
-main .section.light,
-main .section.highlight {
+main > .section {
   background-color: var(--color-neutral-100);
-  margin: 0;
   padding: var(--spacing-xbig) 0;
 }
 
-main .section[data-padding="default"] {
+@media (width >= 900px) {
+  main > .section {
     padding: var(--spacing-xxsmall) 0;
+  }
 }
 
-main .section[data-padding="small"] {
-    padding: var(--spacing-xsmall) 0;
+/* section metadata */
+main > .section[data-section-status="generated"] {
+  visibility: hidden;
 }
 
-main .section[data-padding="medium"] {
-    padding: var(--spacing-small) 0;
+main > .section[data-section-status="loaded"] {
+  visibility: visible;
 }
 
-main .section[data-padding="large"] {
-    padding: var(--spacing-medium) 0;
+main > .section.highlight {
+  background-color: var(--color-neutral-200);
 }
 
-main .section[data-padding="big"] {
-    padding: var(--spacing-big) 0;
+/* utility class for non-root sections */
+main > .section.dark,
+main > .section.highlight.dark {
+  background-color: var(--color-neutral-900);
+  color: var(--color-neutral-50);
 }
 
-main .section[data-padding="xbig"] {
-    padding: var(--spacing-xbig) 0;
+main > .section.dark a:any-link {
+  color: var(--color-neutral-50);
 }
 
-main .section[data-padding="xxbig"] {
-    padding: var(--spacing-xxbig) 0;
+main > .section.dark h1,
+main > .section.dark h2,
+main > .section.dark h3,
+main > .section.dark h4,
+main > .section.dark h5,
+main > .section.dark h6 {
+  color: var(--color-neutral-50);
 }
 
-main .section[data-padding="huge"] {
-    padding: var(--spacing-huge) 0;
+main > .section.dark .button {
+  background-color: var(--color-brand-300);
+  color: var(--color-neutral-900);
 }
 
-main .section[data-padding="xhuge"] {
-    padding: var(--spacing-xhuge) 0;
-}
-
-main .section[data-padding="xxhuge"] {
-    padding: var(--spacing-xxhuge) 0;
-}
-
-
-main .section[data-margin="small"] {
-    margin: var(--spacing-xsmall) 0;
-}
-
-main .section[data-margin="medium"] {
-    margin: var(--spacing-small) 0;
-}
-
-main .section[data-margin="large"] {
-    margin: var(--spacing-medium) 0;
-}
-
-main .section[data-margin="big"] {
-    margin: var(--spacing-big) 0;
-}
-
-main .section[data-margin="xbig"] {
-    margin: var(--spacing-xbig) 0;
-}
-
-main .section[data-margin="xxbig"] {
-    margin: var(--spacing-xxbig) 0;
-}
-
-main .section[data-margin="huge"] {
-    margin: var(--spacing-huge) 0;
-}
-
-main .section[data-margin="xhuge"] {
-    margin: var(--spacing-xhuge) 0;
-}
-
-main .section[data-margin="xxhuge"] {
-    margin: var(--spacing-xxhuge) 0;
-}
-
-/* section metadata - styles - end */
-
-/* Base Design System Tokens */
-.dropin-design.dropin-design {
-  --background-none: none 0 0% no-repeat padding-box;
-}
-
-.dropin-input-date__icon {
-  z-index: 2;
-}
-
-/* Layout: Columns */
-body.columns main {
+/* layout */
+main > .section > div {
   display: flex;
   flex-direction: column;
-  width: 100%;
-  max-width: 1264px;
-  margin: 0 auto;
-  padding: var(--spacing-large) var(--spacing-small);
-  box-sizing: border-box;
 }
 
-body.columns main > .section {
-  flex: 1;
-  flex-basis: 100%;
-  max-width: unset;
-  margin: unset;
-  padding: calc(var(--grid-4-gutters) / 2);
-  box-sizing: border-box;
+main > .section > div > div {
+  order: 1;
 }
 
-body.columns main > .section:first-child {
-  padding-inline-start: 0;
-  padding-block-start: 0;
-}
-
-body.columns main > .section:last-child {
-  padding-inline-end: 0;
-  padding-block-end: 0;
-}
-
-body.columns main > .section > div {
-  max-width: unset;
-  padding: unset;
-}
-
-body.columns main > .section > div:not(:last-child) {
-  margin-bottom: var(--gap, unset);
-}
-
-body.columns main > .section:empty {
-  display: none;
-}
-
-@media (min-width: 600px) {
-  body.columns main {
-    padding: var(--spacing-large) var(--spacing-big);
-  }
-}
-
-.dropin-product-item-card {
-  border: unset;
-}
-
-@media (min-width: 900px) {
-  body.columns main {
-    flex-flow: row wrap;
-  }
-
-  body.columns main > .section {
-    flex: 1;
-    flex-basis: var(--column-width, auto);
-  }
-}
-
-/**
-* Reset main element visibility
-* https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/hidden
-*/
-main[hidden] {
-  display: none !important;
-}
+/* below the fold CSS goes in lazy-styles.css */
