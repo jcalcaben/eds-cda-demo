@@ -1,1 +1,9 @@
 /* add global styles that can be loaded post LCP here */
+
+.section.pastel {
+  background: linear-gradient(135deg, #fdf9ff 0%, #f7f0fc 52%, #efe5f7 100%);
+}
+
+.section.pastel-dark {
+  background: linear-gradient(135deg, #efe5f7 0%, #d9c0e5 52%, #c3a8d1 100%);
+}
