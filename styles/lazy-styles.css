@@ -1,1 +1,6 @@
 /* add global styles that can be loaded post LCP here */
+:root {
+  --color-neutral-100: #faf7fc;
+  --color-neutral-200: #f3eef8;
+  --color-neutral-300: #e4d8f0;
+}
