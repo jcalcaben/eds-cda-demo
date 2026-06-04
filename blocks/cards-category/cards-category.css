@@ -1,0 +1,27 @@
+.cards-category > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(257px, 1fr));
+  gap: 24px;
+}
+
+.cards-category > ul > li {
+  border: 1px solid #dadada;
+  background-color: var(--background-color);
+}
+
+.cards-category .cards-category-card-body {
+  margin: 16px;
+}
+
+.cards-category .cards-category-card-image {
+  line-height: 0;
+}
+
+.cards-category > ul > li img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}

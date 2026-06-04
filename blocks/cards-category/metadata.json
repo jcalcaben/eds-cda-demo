@@ -1,0 +1,39 @@
+{
+  "variantName": "cards-category",
+  "baseBlock": "cards",
+  "version": "1.0.0",
+  "created": "2026-05-20T22:24:00.000Z",
+  "sourceContext": {
+    "originUrl": "https://venia.magento.com/",
+    "originPage": "Homepage - e-commerce storefront",
+    "blockPosition": "middle"
+  },
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "compact",
+    "purpose": "category-navigation",
+    "imagePattern": "large"
+  },
+  "contentPattern": {
+    "structure": "3 cards: image + heading + short description",
+    "buttonCount": 0,
+    "imageCount": 3
+  },
+  "reuseGuidance": {
+    "suitableFor": [
+      "category navigation cards",
+      "product category callouts",
+      "featured category highlights with images"
+    ],
+    "notSuitableFor": [
+      "detailed product cards with prices",
+      "text-only card layouts",
+      "cards with call-to-action buttons"
+    ]
+  },
+  "usage": {
+    "pagesUsing": ["/index"],
+    "reuseCount": 1,
+    "lastUsed": "2026-05-20T22:24:00.000Z"
+  }
+}

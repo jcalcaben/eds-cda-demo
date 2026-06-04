@@ -1,0 +1,39 @@
+{
+  "variantName": "columns-promo",
+  "baseBlock": "columns",
+  "version": "1.0.0",
+  "created": "2026-05-20T22:24:00.000Z",
+  "sourceContext": {
+    "originUrl": "https://venia.magento.com/",
+    "originPage": "Homepage - e-commerce storefront",
+    "blockPosition": "middle"
+  },
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "spacious",
+    "purpose": "promotional-banner",
+    "imagePattern": "large"
+  },
+  "contentPattern": {
+    "structure": "2 columns: text content (heading + subheading + paragraph + CTAs) + large image",
+    "buttonCount": 2,
+    "imageCount": 1
+  },
+  "reuseGuidance": {
+    "suitableFor": [
+      "promotional banners with text and image side-by-side",
+      "product highlight sections",
+      "feature showcase with text and imagery"
+    ],
+    "notSuitableFor": [
+      "multi-column text-only layouts",
+      "three-column or more layouts",
+      "columns with equal text content on both sides"
+    ]
+  },
+  "usage": {
+    "pagesUsing": ["/index"],
+    "reuseCount": 1,
+    "lastUsed": "2026-05-20T22:24:00.000Z"
+  }
+}
