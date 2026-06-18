@@ -39,6 +39,33 @@
   color: var(--text-color);
 }
 
+/* Venia-style filled pill CTA */
+.hero-homepage p:last-child a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  margin-top: 8px;
+  padding: 0 30px;
+  background-color: var(--color-brand-500);
+  border: 2px solid var(--color-brand-500);
+  border-radius: 20px;
+  color: var(--background-color);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.25px;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.hero-homepage p:last-child a:hover {
+  background-color: var(--color-brand-600);
+  border-color: var(--color-brand-600);
+  color: var(--background-color);
+  text-decoration: none;
+}
+
 .hero-homepage picture {
   position: absolute;
   z-index: -1;

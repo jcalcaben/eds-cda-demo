@@ -19,6 +19,32 @@
   display: block;
 }
 
+/* Venia-style outline pill CTAs */
+.columns-promo a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  margin-top: 8px;
+  padding: 0 24px;
+  background-color: transparent;
+  border: 2px solid var(--color-brand-500);
+  border-radius: 20px;
+  color: var(--color-brand-500);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.25px;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.columns-promo a:hover {
+  background-color: var(--color-brand-500);
+  color: var(--background-color);
+  text-decoration: none;
+}
+
 @media (min-width: 900px) {
   .columns-promo > div {
     align-items: center;
@@ -29,5 +55,38 @@
   .columns-promo > div > div {
     flex: 1;
     order: unset;
+  }
+}
+
+/* Vacations variant: image-first row gets a dark text panel (Venia) */
+.columns-promo > div:has(> .columns-promo-img-col:first-child) > div:last-child {
+  background-color: #1b252c;
+  color: var(--background-color);
+  padding: 40px;
+}
+
+.columns-promo > div:has(> .columns-promo-img-col:first-child) > div:last-child h2,
+.columns-promo > div:has(> .columns-promo-img-col:first-child) > div:last-child p {
+  color: var(--background-color);
+}
+
+/* White outline CTA on the dark panel for contrast */
+.columns-promo > div:has(> .columns-promo-img-col:first-child) > div:last-child a {
+  border-color: var(--background-color);
+  color: var(--background-color);
+}
+
+.columns-promo > div:has(> .columns-promo-img-col:first-child) > div:last-child a:hover {
+  background-color: var(--background-color);
+  color: #1b252c;
+}
+
+@media (min-width: 900px) {
+  .columns-promo > div:has(> .columns-promo-img-col:first-child) > div:last-child {
+    padding: 64px 56px;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 }
