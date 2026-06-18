@@ -1,0 +1,87 @@
+.hero-homepage-container .hero-homepage-wrapper {
+  max-width: unset;
+  padding: 0;
+}
+
+.hero-homepage {
+  position: relative;
+  padding: 40px 24px;
+  min-height: 300px;
+}
+
+.hero-homepage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgb(0 0 0 / 45%);
+  z-index: 0;
+}
+
+.hero-homepage > *:not(picture) {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-homepage h1,
+.hero-homepage h2,
+.hero-homepage h3,
+.hero-homepage h4,
+.hero-homepage h5,
+.hero-homepage h6,
+.hero-homepage p {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  color: var(--background-color);
+}
+
+.hero-homepage.no-image * {
+  color: var(--text-color);
+}
+
+/* Venia-style filled pill CTA */
+.hero-homepage p:last-child a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  margin-top: 8px;
+  padding: 0 30px;
+  background-color: var(--color-brand-500);
+  border: 2px solid var(--color-brand-500);
+  border-radius: 20px;
+  color: var(--background-color);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.25px;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.hero-homepage p:last-child a:hover {
+  background-color: var(--color-brand-600);
+  border-color: var(--color-brand-600);
+  color: var(--background-color);
+  text-decoration: none;
+}
+
+.hero-homepage picture {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  object-fit: cover;
+  box-sizing: border-box;
+}
+
+.hero-homepage img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+@media (min-width: 900px) {
+  .hero-homepage {
+    padding: 40px 32px;
+  }
+}
