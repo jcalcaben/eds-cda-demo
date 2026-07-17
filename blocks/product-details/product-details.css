@@ -24,11 +24,62 @@
 }
 
 .product-details__header {
-  margin-bottom: var(--spacing-medium);
+  margin-bottom: var(--spacing-small);
+}
+
+.product-details__share {
+  margin-top: 0;
+  margin-bottom: var(--spacing-small);
+}
+
+.product-details__share-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xsmall);
+  flex-wrap: wrap;
+}
+
+.product-details__share-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--spacing-xxbig);
+  height: var(--spacing-xxbig);
+  padding: 0;
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--border-radius-small);
+  background: var(--color-white);
+  color: var(--color-neutral-800);
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.product-details__share-button:hover,
+.product-details__share-button:focus-visible {
+  border-color: var(--color-neutral-500);
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-900);
+}
+
+.product-details__share-button:focus-visible {
+  outline: 2px solid var(--color-neutral-900);
+  outline-offset: 2px;
+}
+
+.product-details__share-icon {
+  width: var(--spacing-small);
+  height: var(--spacing-small);
+  fill: currentcolor;
+}
+
+.product-details__share-status {
+  font-size: var(--type-body-xs-size);
+  line-height: var(--type-body-xs-line-height);
+  color: var(--color-neutral-600);
+  margin-inline-start: var(--spacing-xxsmall);
 }
 
 .product-details__price {
-  margin-top: var(--spacing-medium);
+  margin-top: var(--spacing-small);
 }
 
 .product-details__gallery .pdp-carousel {
@@ -40,11 +91,9 @@
 }
 
 .product-details__gallery .pdp-overlay__content .pdp-carousel,
-.product-details__gallery .pdp-overlay__content .pdp-carousel--thumbnailsRow
-{
-  max-height: unset;;
+.product-details__gallery .pdp-overlay__content .pdp-carousel--thumbnailsRow {
+  max-height: unset;
 }
-
 
 .product-details__configuration {
   grid-column: 1 / span 4;
@@ -87,7 +136,7 @@
     display: block;
     grid-column: 1 / span 6;
   }
-  
+
   .product-details__right-column {
     grid-column: 7 / span 5;
     padding-top: var(--spacing-medium);
