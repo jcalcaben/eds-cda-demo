@@ -38,6 +38,132 @@ import { IMAGES_SIZES } from '../../scripts/initializers/pdp.js';
 import '../../scripts/initializers/cart.js';
 import '../../scripts/initializers/wishlist.js';
 
+function createSvgIcon(pathData, viewBox = '0 0 24 24') {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', viewBox);
+  svg.setAttribute('aria-hidden', 'true');
+  svg.setAttribute('focusable', 'false');
+  svg.classList.add('product-details__share-icon');
+
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  path.setAttribute('d', pathData);
+  svg.appendChild(path);
+  return svg;
+}
+
+function buildShareUrl(type, encodedUrl) {
+  switch (type) {
+    case 'facebook':
+      return `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
+    case 'x':
+      return `https://twitter.com/intent/tweet?url=${encodedUrl}`;
+    case 'linkedin':
+      return `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
+    default:
+      return '';
+  }
+}
+
+function openSharePopup(url, platform) {
+  try {
+    const features = 'noopener,noreferrer,width=600,height=600';
+    const popup = window.open(url, '_blank', features);
+    if (popup) {
+      popup.opener = null;
+      return true;
+    }
+    console.warn('Share popup blocked', { platform });
+    return false;
+  } catch (error) {
+    console.error('Failed to open share popup', { platform, error });
+    return false;
+  }
+}
+
+async function copyCurrentUrl(currentUrl, statusEl) {
+  try {
+    if (!navigator.clipboard?.writeText) {
+      throw new Error('Clipboard API unavailable');
+    }
+    await navigator.clipboard.writeText(currentUrl);
+    statusEl.textContent = 'Copied';
+    statusEl.hidden = false;
+    window.clearTimeout(statusEl._hideTimer);
+    statusEl._hideTimer = window.setTimeout(() => {
+      statusEl.hidden = true;
+      statusEl.textContent = '';
+    }, 1800);
+    return true;
+  } catch (error) {
+    console.error('Failed to copy share link', { error });
+    statusEl.textContent = '';
+    statusEl.hidden = true;
+    return false;
+  }
+}
+
+function createShareButton({ label, platform, icon, onClick }) {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'product-details__share-button';
+  button.setAttribute('aria-label', label);
+  button.title = label;
+  button.appendChild(icon);
+  button.addEventListener('click', onClick);
+  button.dataset.platform = platform;
+  return button;
+}
+
+function renderShareRow(container, labels) {
+  if (!container) return;
+  container.replaceChildren();
+
+  const currentUrl = window.location.href;
+  const encodedUrl = encodeURIComponent(currentUrl);
+  const row = document.createElement('div');
+  row.className = 'product-details__share-row';
+
+  const facebookButton = createShareButton({
+    label: 'Facebook',
+    platform: 'facebook',
+    icon: createSvgIcon('M13.5 8H15V5h-1.5C11.57 5 10 6.57 10 8.5V10H8v3h2v6h3v-6h2.22l.28-3H13v-1.5c0-.28.22-.5.5-.5Z'),
+    onClick: () => openSharePopup(buildShareUrl('facebook', encodedUrl), 'facebook'),
+  });
+
+  const xButton = createShareButton({
+    label: 'X/Twitter',
+    platform: 'x',
+    icon: createSvgIcon('M18.89 3H21l-5.8 6.62L22 21h-5.52l-4.32-5.47L7.36 21H5.25l6.2-7.08L2 3h5.66l3.92 4.97L18.89 3Zm-1.93 16h1.47L6.86 4.95H5.29L16.96 19Z'),
+    onClick: () => openSharePopup(buildShareUrl('x', encodedUrl), 'x'),
+  });
+
+  const linkedInButton = createShareButton({
+    label: 'LinkedIn',
+    platform: 'linkedin',
+    icon: createSvgIcon('M6.94 7.5A1.95 1.95 0 1 1 6.95 3.6 1.95 1.95 0 0 1 6.94 7.5ZM5.5 20.4V9h2.88v11.4H5.5Zm4.24 0V9h2.76v1.56h.04c.38-.72 1.32-1.48 2.72-1.48 2.9 0 3.44 1.9 3.44 4.38v6.94h-2.88v-6.16c0-1.47-.03-3.36-2.05-3.36-2.05 0-2.36 1.6-2.36 3.25v6.27H9.74Z'),
+    onClick: () => openSharePopup(buildShareUrl('linkedin', encodedUrl), 'linkedin'),
+  });
+
+  const copyStatus = document.createElement('span');
+  copyStatus.className = 'product-details__share-status';
+  copyStatus.hidden = true;
+  copyStatus.setAttribute('aria-live', 'polite');
+
+  const copyButton = createShareButton({
+    label: 'Copy Link',
+    platform: 'copy',
+    icon: createSvgIcon('M16 1H6a2 2 0 0 0-2 2v12h2V3h10V1Zm3 4H10a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Zm0 16H10V7h9v14Z'),
+    onClick: () => copyCurrentUrl(currentUrl, copyStatus),
+  });
+
+  row.appendChild(facebookButton);
+  row.appendChild(xButton);
+  row.appendChild(linkedInButton);
+  row.appendChild(copyButton);
+  row.appendChild(copyStatus);
+  container.appendChild(row);
+}
+
 /**
  * Checks if the page has prerendered product JSON-LD data
  * @returns {boolean} True if product JSON-LD exists and contains @type=Product
@@ -58,7 +184,6 @@ function isProductPrerendered() {
   }
 }
 
-// Function to update the Add to Cart button text
 function updateAddToCartButtonText(addToCartInstance, inCart, labels) {
   const buttonText = inCart
     ? labels.Global?.UpdateProductInCart
@@ -83,19 +208,12 @@ function formatNumericAttributeValue(value) {
 
 export default async function decorate(block) {
   const eventProduct = events.lastPayload('pdp/data') ?? null;
-  // bug: the pdp sends an object with event data even if product is not found.
   const product = eventProduct?.sku ? eventProduct : null;
-
   const labels = await fetchPlaceholders();
-
-  // Read itemUid from URL
   const urlParams = new URLSearchParams(window.location.search);
   const itemUidFromUrl = urlParams.get('itemUid');
-
-  // State to track if we are in update mode
   let isUpdateMode = false;
 
-  // Layout
   const fragment = document.createRange().createContextualFragment(`
     <div class="product-details__alert"></div>
     <div class="product-details__wrapper">
@@ -104,454 +222,6 @@ export default async function decorate(block) {
       </div>
       <div class="product-details__right-column">
         <div class="product-details__header"></div>
+        <div class="product-details__share"></div>
         <div class="product-details__price"></div>
-        <div class="product-details__gallery"></div>
-        <div class="product-details__short-description"></div>
-        <div class="product-details__gift-card-options"></div>
-        <div class="product-details__configuration">
-          <div class="product-details__options"></div>
-          <div class="product-details__quantity"></div>
-          <div class="product-details__buttons">
-            <div class="product-details__buttons__add-to-cart"></div>
-            <div class="product-details__buttons__add-to-wishlist"></div>
-          </div>
-        </div>
-        <div class="product-details__description"></div>
-        <div class="product-details__attributes"></div>
-      </div>
-    </div>
-  `);
-
-  const $alert = fragment.querySelector('.product-details__alert');
-  const $gallery = fragment.querySelector('.product-details__gallery');
-  const $header = fragment.querySelector('.product-details__header');
-  const $price = fragment.querySelector('.product-details__price');
-  const $galleryMobile = fragment.querySelector('.product-details__right-column .product-details__gallery');
-  const $shortDescription = fragment.querySelector('.product-details__short-description');
-  const $options = fragment.querySelector('.product-details__options');
-  const $quantity = fragment.querySelector('.product-details__quantity');
-  const $giftCardOptions = fragment.querySelector('.product-details__gift-card-options');
-  const $addToCart = fragment.querySelector('.product-details__buttons__add-to-cart');
-  const $wishlistToggleBtn = fragment.querySelector('.product-details__buttons__add-to-wishlist');
-  const $description = fragment.querySelector('.product-details__description');
-  const $attributes = fragment.querySelector('.product-details__attributes');
-
-  block.replaceChildren(fragment);
-
-  const gallerySlots = {
-    CarouselThumbnail: (ctx) => {
-      if (ctx.mediaType === 'image') {
-        tryRenderAemAssetsImage(ctx, {
-          ...imageSlotConfig(ctx),
-          wrapper: document.createElement('span'),
-        });
-      }
-    },
-
-    CarouselMainImage: (ctx) => {
-      if (ctx.mediaType === 'image') {
-        tryRenderAemAssetsImage(ctx, {
-          ...imageSlotConfig(ctx),
-        });
-      }
-    },
-  };
-
-  // Alert
-  let inlineAlert = null;
-  const routeToWishlist = rootLink('/wishlist');
-
-  const [
-    _galleryMobile,
-    _gallery,
-    _header,
-    _price,
-    _shortDescription,
-    _options,
-    _quantity,
-    _giftCardOptions,
-    _description,
-    _attributes,
-    wishlistToggleBtn,
-  ] = await Promise.all([
-    // Gallery (Mobile)
-    pdpRendered.render(ProductGallery, {
-      controls: 'dots',
-      arrows: true,
-      peak: false,
-      gap: 'small',
-      loop: false,
-      videos: true, // Display videos if available
-      imageParams: {
-        ...IMAGES_SIZES,
-      },
-
-      slots: gallerySlots,
-    })($galleryMobile),
-
-    // Gallery (Desktop)
-    pdpRendered.render(ProductGallery, {
-      controls: 'thumbnailsColumn',
-      arrows: true,
-      peak: true,
-      gap: 'small',
-      loop: false,
-      videos: true, // Display videos if available
-      imageParams: {
-        ...IMAGES_SIZES,
-      },
-
-      slots: gallerySlots,
-    })($gallery),
-
-    // Header
-    pdpRendered.render(ProductHeader, {})($header),
-
-    // Price
-    pdpRendered.render(ProductPrice, {})($price),
-
-    // Short Description
-    pdpRendered.render(ProductShortDescription, {})($shortDescription),
-
-    // Configuration - Swatches
-    pdpRendered.render(ProductOptions, {
-      hideSelectedValue: false,
-      slots: {
-        SwatchImage: (ctx) => {
-          tryRenderAemAssetsImage(ctx, {
-            ...imageSlotConfig(ctx),
-            wrapper: document.createElement('span'),
-          });
-        },
-      },
-    })($options),
-
-    // Configuration  Quantity
-    pdpRendered.render(ProductQuantity, {})($quantity),
-
-    // Configuration  Gift Card Options
-    pdpRendered.render(ProductGiftCardOptions, {})($giftCardOptions),
-
-    // Description
-    pdpRendered.render(ProductDescription, {})($description),
-
-    // Attributes
-    pdpRendered.render(ProductAttributes, {
-      formatValue: formatNumericAttributeValue,
-    })($attributes),
-
-    // Wishlist button - WishlistToggle Container
-    wishlistRender.render(WishlistToggle, {
-      product,
-    })($wishlistToggleBtn),
-  ]);
-
-  // Configuration – Button - Add to Cart
-  const addToCart = await UI.render(Button, {
-    children: labels.Global?.AddProductToCart,
-    icon: h(Icon, { source: 'Cart' }),
-    onClick: async () => {
-      const buttonActionText = isUpdateMode
-        ? labels.Global?.UpdatingInCart
-        : labels.Global?.AddingToCart;
-      try {
-        addToCart.setProps((prev) => ({
-          ...prev,
-          children: buttonActionText,
-          disabled: true,
-        }));
-
-        // get the current selection values
-        const values = pdpApi.getProductConfigurationValues();
-        const valid = pdpApi.isProductConfigurationValid();
-
-        // add or update the product in the cart
-        if (valid) {
-          if (isUpdateMode) {
-            // --- Update existing item ---
-            const { updateProductsFromCart } = await import(
-              '@dropins/storefront-cart/api.js'
-            );
-
-            await updateProductsFromCart([{ ...values, uid: itemUidFromUrl }]);
-
-            // --- START REDIRECT ON UPDATE ---
-            const updatedSku = values?.sku;
-            if (updatedSku) {
-              const cartRedirectUrl = new URL(
-                rootLink('/cart'),
-                window.location.origin,
-              );
-              cartRedirectUrl.searchParams.set('itemUid', itemUidFromUrl);
-              window.location.href = cartRedirectUrl.toString();
-            } else {
-              // Fallback if SKU is somehow missing (shouldn't happen in normal flow)
-              console.warn(
-                'Could not retrieve SKU for updated item. Redirecting to cart without parameter.',
-              );
-              window.location.href = rootLink('/cart');
-            }
-            return;
-          }
-          // --- Add new item ---
-          const { addProductsToCart } = await import(
-            '@dropins/storefront-cart/api.js'
-          );
-          await addProductsToCart([{ ...values }]);
-        }
-
-        // reset any previous alerts if successful
-        inlineAlert?.remove();
-      } catch (error) {
-        // add alert message
-        inlineAlert = await UI.render(InLineAlert, {
-          heading: 'Error',
-          description: error.message,
-          icon: h(Icon, { source: 'Warning' }),
-          'aria-live': 'assertive',
-          role: 'alert',
-          onDismiss: () => {
-            inlineAlert.remove();
-          },
-        })($alert);
-
-        // Scroll the alertWrapper into view
-        $alert.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center',
-        });
-      } finally {
-        // Reset button text using the helper function which respects the current mode
-        updateAddToCartButtonText(addToCart, isUpdateMode, labels);
-        // Re-enable button
-        addToCart.setProps((prev) => ({
-          ...prev,
-          disabled: false,
-        }));
-      }
-    },
-  })($addToCart);
-
-  // Lifecycle Events
-  events.on('pdp/valid', (valid) => {
-    // update add to cart button disabled state based on product selection validity
-    addToCart.setProps((prev) => ({ ...prev, disabled: !valid }));
-  }, { eager: true });
-
-  // Handle option changes
-  events.on('pdp/values', () => {
-    if (wishlistToggleBtn) {
-      const configValues = pdpApi.getProductConfigurationValues();
-
-      // Check URL parameter for empty optionsUIDs
-      const urlOptionsUIDs = urlParams.get('optionsUIDs');
-
-      // If URL has empty optionsUIDs parameter, treat as base product (no options)
-      const optionUIDs = urlOptionsUIDs === '' ? undefined : (configValues?.optionsUIDs || undefined);
-
-      wishlistToggleBtn.setProps((prev) => ({
-        ...prev,
-        product: {
-          ...product,
-          optionUIDs,
-        },
-      }));
-    }
-  }, { eager: true });
-
-  events.on('wishlist/alert', ({ action, item }) => {
-    wishlistRender.render(WishlistAlert, {
-      action,
-      item,
-      routeToWishlist,
-    })($alert);
-
-    setTimeout(() => {
-      $alert.innerHTML = '';
-    }, 5000);
-
-    setTimeout(() => {
-      $alert.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-      });
-    }, 0);
-  });
-
-  // --- Add new event listener for cart/data ---
-  events.on(
-    'cart/data',
-    (cartData) => {
-      let itemIsInCart = false;
-      if (itemUidFromUrl && cartData?.items) {
-        itemIsInCart = cartData.items.some(
-          (item) => item.uid === itemUidFromUrl,
-        );
-      }
-      // Set the update mode state
-      isUpdateMode = itemIsInCart;
-
-      // Update button text based on whether the item is in the cart
-      updateAddToCartButtonText(addToCart, itemIsInCart, labels);
-    },
-    { eager: true },
-  );
-
-  // Set JSON-LD and Meta Tags
-  events.on('aem/lcp', () => {
-    const isPrerendered = isProductPrerendered();
-    if (product && !isPrerendered) {
-      setJsonLdProduct(product);
-      setMetaTags(product);
-      document.title = product.name;
-    }
-  }, { eager: true });
-
-  return Promise.resolve();
-}
-
-async function setJsonLdProduct(product) {
-  const {
-    name,
-    inStock,
-    description,
-    sku,
-    urlKey,
-    price,
-    priceRange,
-    images,
-    attributes,
-  } = product;
-  const amount = priceRange?.minimum?.final?.amount || price?.final?.amount;
-  const brand = attributes?.find((attr) => attr.name === 'brand');
-
-  // get variants
-  const { data } = await pdpApi.fetchGraphQl(`
-    query GET_PRODUCT_VARIANTS($sku: String!) {
-      variants(sku: $sku) {
-        variants {
-          product {
-            sku
-            name
-            inStock
-            images(roles: ["image"]) {
-              url
-            }
-            ...on SimpleProductView {
-              price {
-                final { amount { currency value } }
-              }
-            }
-          }
-        }
-      }
-    }
-  `, {
-    method: 'GET',
-    variables: { sku },
-  });
-
-  const variants = data?.variants?.variants || [];
-
-  const ldJson = {
-    '@context': 'http://schema.org',
-    '@type': 'Product',
-    name,
-    description,
-    image: images[0]?.url,
-    offers: [],
-    productID: sku,
-    brand: {
-      '@type': 'Brand',
-      name: brand?.value,
-    },
-    url: new URL(getProductLink(urlKey, sku), window.location),
-    sku,
-    '@id': new URL(getProductLink(urlKey, sku), window.location),
-  };
-
-  if (variants.length > 1) {
-    ldJson.offers.push(...variants.map((variant) => ({
-      '@type': 'Offer',
-      name: variant.product.name,
-      image: variant.product.images[0]?.url,
-      price: variant.product.price.final.amount.value,
-      priceCurrency: variant.product.price.final.amount.currency,
-      availability: variant.product.inStock ? 'http://schema.org/InStock' : 'http://schema.org/OutOfStock',
-      sku: variant.product.sku,
-    })));
-  } else {
-    ldJson.offers.push({
-      '@type': 'Offer',
-      price: amount?.value,
-      priceCurrency: amount?.currency,
-      availability: inStock ? 'http://schema.org/InStock' : 'http://schema.org/OutOfStock',
-    });
-  }
-
-  setJsonLd(ldJson, 'product');
-}
-
-function createMetaTag(property, content, type) {
-  if (!property || !type) {
-    return;
-  }
-  let meta = document.head.querySelector(`meta[${type}="${property}"]`);
-  if (meta) {
-    if (!content) {
-      meta.remove();
-      return;
-    }
-    meta.setAttribute(type, property);
-    meta.setAttribute('content', content);
-    return;
-  }
-  if (!content) {
-    return;
-  }
-  meta = document.createElement('meta');
-  meta.setAttribute(type, property);
-  meta.setAttribute('content', content);
-  document.head.appendChild(meta);
-}
-
-function setMetaTags(product) {
-  if (!product?.sku) {
-    return;
-  }
-
-  const price = product.prices.final.minimumAmount ?? product.prices.final.amount;
-
-  createMetaTag('title', product.metaTitle || product.name, 'name');
-  createMetaTag('description', product.metaDescription, 'name');
-  createMetaTag('keywords', product.metaKeyword, 'name');
-
-  createMetaTag('og:type', 'product', 'property');
-  createMetaTag('og:description', product.shortDescription, 'property');
-  createMetaTag('og:title', product.metaTitle || product.name, 'property');
-  createMetaTag('og:url', window.location.href, 'property');
-  const mainImage = product?.images?.filter((image) => image.roles.includes('thumbnail'))[0];
-  const metaImage = mainImage?.url || product?.images[0]?.url;
-  createMetaTag('og:image', metaImage, 'property');
-  createMetaTag('og:image:secure_url', metaImage, 'property');
-  createMetaTag('product:price:amount', price.value, 'property');
-  createMetaTag('product:price:currency', price.currency, 'property');
-}
-
-/**
- * Returns the configuration for an image slot.
- * @param ctx - The context of the slot.
- * @returns The configuration for the image slot.
- */
-function imageSlotConfig(ctx) {
-  const { data, defaultImageProps } = ctx;
-  return {
-    alias: data.sku,
-    imageProps: defaultImageProps,
-
-    params: {
-      width: defaultImageProps.width,
-      height: defaultImageProps.height,
-    },
-  };
-}
+        <div class="product-details__
